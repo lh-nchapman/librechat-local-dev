@@ -41,6 +41,33 @@ Local development setup for LibreChat (loveholid.ai).
 
 ## Configuration
 
+### Files
+
+| File | Purpose |
+|------|---------|
+| `docker-compose.yml` | Main stack: API, MongoDB, MeiliSearch, RAG |
+| `docker-compose.override.yaml` | Local overrides: gcloud auth, logos, metrics |
+| `librechat.yaml` | LibreChat config: models, MCP servers, UI |
+| `.env` | Environment variables and secrets |
+
+### MCP Servers
+
+The `librechat.yaml` includes these MCP servers:
+- `lh-insights-http` - loveholidays insights
+- `html-share` - HTML sharing
+- `feedback` - Feedback collection
+- `looker` - Looker data queries
+
+### Models
+
+Pre-configured models:
+- **Gemini 2.5 Pro** (default) - Most capable, 1M context
+- **Gemini 3 Pro** - Latest preview
+- **Gemini 2.0 Flash** - Fast and efficient
+- **Claude Sonnet 4** - Anthropic balanced
+- **Claude Opus 4.5** - Anthropic flagship with extended thinking
+- **Claude Opus 4** - Anthropic previous flagship
+
 ### Environment Variables
 
 Key variables in `.env`:
@@ -51,10 +78,6 @@ Key variables in `.env`:
 | `GOOGLE_CLIENT_SECRET` | Google OAuth client secret |
 | `ANTHROPIC_API_KEY` | Anthropic API key for Claude models |
 | `ENDPOINTS` | Enabled AI endpoints (e.g., `google,anthropic`) |
-
-### Model Configuration
-
-Edit `librechat.yaml` to customize available models and their settings.
 
 ## Stopping
 
@@ -77,6 +100,9 @@ Ensure your OAuth consent screen is configured and your redirect URI includes `h
 
 ### Models not loading
 Check that your API keys are correctly set in `.env` and that the endpoints are enabled.
+
+### MCP servers not connecting
+The MCP servers require VPN/network access to `*.lvh.systems` endpoints.
 
 ## Links
 
