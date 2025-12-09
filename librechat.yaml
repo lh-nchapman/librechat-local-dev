@@ -16,37 +16,120 @@ registration:
   allowedDomains:
     - 'loveholidays.com'
 
-# Add MCP servers here if needed
-# mcpServers:
-#   example:
-#     type: streamable-http
-#     url: https://your-mcp-server.com/mcp
-#     startup: true
-#     initTimeout: 60000
+mcpServers:
+  lh-insights-http:
+    type: streamable-http
+    url: https://mcp-lh-insights.lvh.systems/mcp
+    startup: true
+    initTimeout: 60000
+  html-share:
+    type: streamable-http
+    url: https://mcp-html-share.lvh.systems
+    startup: true
+    initTimeout: 60000
+  feedback:
+    type: streamable-http
+    url: https://mcp-feedback-server.lvh.systems
+    startup: true
+    initTimeout: 60000
+  looker:
+    type: streamable-http
+    url: https://mcp-looker.lvh.systems/mcp
+    startup: true
+    initTimeout: 60000
+    timeout: 120000  # 2 minutes for tool calls (Looker queries can be slow)
 
 modelSpecs:
   enforce: false
   prioritize: true
   list:
+    - name: "gemini-2.5-pro"
+      label: "Gemini 2.5 Pro"
+      default: true
+      description: "Most capable Gemini model for complex tasks"
+      iconURL: "google"
+      preset:
+        endpoint: "google"
+        model: "gemini-2.5-pro"
+        temperature: 0  # More deterministic behavior for consistent tool calling
+        maxContextTokens: 1000000  # Explicitly set 1M context window
+        maxOutputTokens: 65536    # Max output for Gemini 2.5 Pro
+        promptPrefix: |
+          You are a helpful AI assistant for loveholidays with access to Looker MCP tools for querying business data.
+
+          CRITICAL - TOOL EXECUTION RULES:
+          - ALWAYS call tools immediately. NEVER describe what you will do - just do it.
+          - WRONG: "I'll use the query tool to fetch..." or "Let me construct a query..."
+          - RIGHT: Simply call the tool without narration.
+          - After calling a tool, wait for the result before proceeding.
+          - Do NOT output planning text. Execute tools silently and present results.
+
+          When asked about data (bookings, revenue, customers, etc.):
+          1. Use the "loveholidays" model by default
+          2. Use get_explores to find relevant explores (e.g., "sales", "orders_and_bookings")
+          3. Use get_dimensions and get_measures to understand available fields
+          4. Use query to fetch the data - include appropriate filters like {"sales.booking_date": "today"}
+          5. Use query_url to generate a Looker link for the user
+
+          NEVER ask the user which model, explore, or fields to use. Discover them yourself.
+          Make reasonable assumptions based on field names and descriptions.
+          Always provide the Looker URL so users can explore further.
+    - name: "gemini-3-pro"
+      label: "Gemini 3 Pro"
+      description: "Latest Gemini 3 Pro preview model"
+      iconURL: "google"
+      preset:
+        endpoint: "google"
+        model: "gemini-3-pro-preview"
+        temperature: 0  # More deterministic behavior for consistent tool calling
+        promptPrefix: |
+          You are a helpful AI assistant for loveholidays with access to Looker MCP tools for querying business data.
+
+          CRITICAL - TOOL EXECUTION RULES:
+          - ALWAYS call tools immediately. NEVER describe what you will do - just do it.
+          - WRONG: "I'll use the query tool to fetch..." or "Let me construct a query..."
+          - RIGHT: Simply call the tool without narration.
+          - After calling a tool, wait for the result before proceeding.
+          - Do NOT output planning text. Execute tools silently and present results.
+
+          When asked about data (bookings, revenue, customers, etc.):
+          1. Use the "loveholidays" model by default
+          2. Use get_explores to find relevant explores (e.g., "sales", "orders_and_bookings")
+          3. Use get_dimensions and get_measures to understand available fields
+          4. Use query to fetch the data - include appropriate filters like {"sales.booking_date": "today"}
+          5. Use query_url to generate a Looker link for the user
+
+          NEVER ask the user which model, explore, or fields to use. Discover them yourself.
+          Make reasonable assumptions based on field names and descriptions.
+          Always provide the Looker URL so users can explore further.
     - name: "gemini-2.0-flash"
       label: "Gemini 2.0 Flash"
-      default: true
       description: "Fast and efficient Gemini model"
       iconURL: "google"
       preset:
         endpoint: "google"
         model: "gemini-2.0-flash"
         temperature: 0.7
-    - name: "gemini-2.5-pro"
-      label: "Gemini 2.5 Pro"
-      description: "Most capable Gemini model for complex tasks"
-      iconURL: "google"
-      preset:
-        endpoint: "google"
-        model: "gemini-2.5-pro"
-        temperature: 0
-        maxContextTokens: 1000000
-        maxOutputTokens: 65536
+        promptPrefix: |
+          You are a helpful AI assistant for loveholidays with access to Looker MCP tools for querying business data.
+
+          CRITICAL - TOOL EXECUTION RULES:
+          - ALWAYS call tools immediately. NEVER describe what you will do - just do it.
+          - WRONG: "I'll use the query tool to fetch..." or "Let me construct a query..."
+          - RIGHT: Simply call the tool without narration.
+          - After calling a tool, wait for the result before proceeding.
+          - Do NOT output planning text. Execute tools silently and present results.
+
+          When asked about data (bookings, revenue, customers, etc.):
+          1. Use the "loveholidays" model by default
+          2. Use get_explores to find relevant explores (e.g., "sales", "orders_and_bookings")
+          3. Use get_dimensions and get_measures to understand available fields
+          4. Use query to fetch the data - include appropriate filters like {"sales.booking_date": "today"}
+          5. Use query_url to generate a Looker link for the user
+
+          NEVER ask the user which model, explore, or fields to use. Discover them yourself.
+          Make reasonable assumptions based on field names and descriptions.
+          Always provide the Looker URL so users can explore further.
     - name: "claude-sonnet"
       label: "Claude Sonnet 4"
       description: "Anthropic's balanced Claude model"
@@ -54,9 +137,17 @@ modelSpecs:
       preset:
         endpoint: "anthropic"
         model: "claude-sonnet-4-20250514"
+    - name: "claude-opus-4.5"
+      label: "Claude Opus 4.5"
+      description: "Anthropic's most capable Claude model with extended thinking"
+      iconURL: "anthropic"
+      preset:
+        endpoint: "anthropic"
+        model: "claude-opus-4-5-20251101"
+        maxOutputTokens: 32000
     - name: "claude-opus"
       label: "Claude Opus 4"
-      description: "Anthropic's most capable model"
+      description: "Anthropic's previous flagship model"
       iconURL: "anthropic"
       preset:
         endpoint: "anthropic"
