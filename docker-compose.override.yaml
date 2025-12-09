@@ -1,19 +1,12 @@
-# Docker Compose overrides for local development
-# Copy this file and customize paths as needed
-
 services:
   api:
     volumes:
-      # Mount Google Cloud credentials for Vertex AI / Google models
-      # Run: gcloud auth application-default login
       - type: bind
         source: ${HOME}/.config/gcloud/application_default_credentials.json
         target: /app/api/data/auth.json
-      # Mount local librechat.yaml for easy config changes
       - type: bind
         source: ./librechat.yaml
         target: /app/librechat.yaml
-      # Custom logo
       - type: bind
         source: ./images/logo.png
         target: /app/client/public/assets/logo.png
@@ -26,11 +19,14 @@ services:
       - type: bind
         source: ./images/logo.svg
         target: /app/client/dist/assets/logo.svg
+      # Mount modified callbacks.js for diagnostic logging
+      - type: bind
+        source: ./api/server/controllers/agents/callbacks.js
+        target: /app/api/server/controllers/agents/callbacks.js
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/app/api/data/auth.json
       - NODE_ENV=development
 
-  # Optional: Prometheus metrics exporter
   metrics:
     image: ghcr.io/virtuos/librechat_exporter:main
     container_name: librechat-metrics

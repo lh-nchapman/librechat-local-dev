@@ -45,7 +45,6 @@ modelSpecs:
   list:
     - name: "gemini-2.5-pro"
       label: "Gemini 2.5 Pro"
-      default: true
       description: "Most capable Gemini model for complex tasks"
       iconURL: "google"
       preset:
@@ -132,6 +131,7 @@ modelSpecs:
           Always provide the Looker URL so users can explore further.
     - name: "claude-sonnet"
       label: "Claude Sonnet 4"
+      default: true
       description: "Anthropic's balanced Claude model"
       iconURL: "anthropic"
       preset:
