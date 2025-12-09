@@ -1,0 +1,10 @@
+services:
+  looker-proxy:
+    build: .
+    container_name: mcp-looker-proxy
+    ports:
+      - "5001:5001"
+    environment:
+      LOOKER_BASE_URL: "https://loveholidays.cloud.looker.com"
+      PORT: "5001"
+    restart: unless-stopped

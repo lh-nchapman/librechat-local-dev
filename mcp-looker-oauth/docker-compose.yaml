@@ -1,0 +1,13 @@
+services:
+  looker-mcp:
+    image: us-central1-docker.pkg.dev/database-toolbox/toolbox/toolbox:0.22.0
+    container_name: looker-mcp-oauth
+    ports:
+      - "5000:8080"
+    command: ["--port", "8080", "--address", "0.0.0.0", "--tools-file", "/app/tools.yaml"]
+    volumes:
+      - ./tools.yaml:/app/tools.yaml:ro
+    environment:
+      # Google OAuth Client ID for validating tokens
+      GOOGLE_CLIENT_ID: "979676847233-to1rqftniu8p3hob0gcj0gok8m09kp5d.apps.googleusercontent.com"
+    restart: unless-stopped

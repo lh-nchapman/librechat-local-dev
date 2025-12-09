@@ -1,0 +1,56 @@
+sources:
+  looker-source:
+    kind: looker
+    base_url: https://loveholidays.cloud.looker.com
+    # Use OAuth tokens from Authorization header instead of client credentials
+    use_client_oauth: true
+    verify_ssl: true
+    show_hidden_models: false
+    show_hidden_explores: false
+    show_hidden_fields: false
+
+tools:
+  get_models:
+    kind: looker-get-models
+    source: looker-source
+    description: "Get all available LookML models"
+
+  get_explores:
+    kind: looker-get-explores
+    source: looker-source
+    description: "Get explores for a given model"
+
+  get_dimensions:
+    kind: looker-get-dimensions
+    source: looker-source
+    description: "Get dimensions for an explore"
+
+  get_measures:
+    kind: looker-get-measures
+    source: looker-source
+    description: "Get measures for an explore"
+
+  query:
+    kind: looker-query
+    source: looker-source
+    description: "Run a query against a Looker explore"
+
+  query_url:
+    kind: looker-query-url
+    source: looker-source
+    description: "Generate a Looker URL for a query"
+
+  get_dashboards:
+    kind: looker-get-dashboards
+    source: looker-source
+    description: "Search for dashboards"
+
+  get_looks:
+    kind: looker-get-looks
+    source: looker-source
+    description: "Search for looks"
+
+  run_look:
+    kind: looker-run-look
+    source: looker-source
+    description: "Run a saved look"

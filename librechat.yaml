@@ -38,6 +38,23 @@ mcpServers:
     startup: true
     initTimeout: 60000
     timeout: 120000  # 2 minutes for tool calls (Looker queries can be slow)
+  # Local OAuth-enabled Looker MCP proxy for testing user credential passthrough
+  looker-oauth:
+    type: streamable-http
+    url: http://host.docker.internal:5001/mcp
+    startup: true
+    initTimeout: 60000
+    timeout: 120000
+    # OAuth configuration for Looker authentication
+    oauth:
+      authorization_url: https://loveholidays.cloud.looker.com/auth
+      token_url: https://loveholidays.cloud.looker.com:443/api/token
+      client_id: librechat-local
+      scope: cors_api
+      redirect_uri: http://localhost:3080/api/mcp/looker-oauth/oauth/callback
+      # Looker OAuth apps are public clients (no client_secret)
+      token_endpoint_auth_methods_supported: ['none']
+      code_challenge_methods_supported: ['S256']
 
 modelSpecs:
   enforce: false
