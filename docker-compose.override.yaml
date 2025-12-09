@@ -7,6 +7,7 @@ services:
       - type: bind
         source: ./librechat.yaml
         target: /app/librechat.yaml
+      # Custom logo (square 512x512)
       - type: bind
         source: ./images/logo.png
         target: /app/client/public/assets/logo.png
@@ -19,6 +20,22 @@ services:
       - type: bind
         source: ./images/logo.svg
         target: /app/client/dist/assets/logo.svg
+      # Favicons and icons
+      - type: bind
+        source: ./images/favicon-16x16.png
+        target: /app/client/dist/assets/favicon-16x16.png
+      - type: bind
+        source: ./images/favicon-32x32.png
+        target: /app/client/dist/assets/favicon-32x32.png
+      - type: bind
+        source: ./images/apple-touch-icon-180x180.png
+        target: /app/client/dist/assets/apple-touch-icon-180x180.png
+      - type: bind
+        source: ./images/icon-192x192.png
+        target: /app/client/dist/assets/icon-192x192.png
+      - type: bind
+        source: ./images/maskable-icon.png
+        target: /app/client/dist/assets/maskable-icon.png
       # Mount modified callbacks.js for diagnostic logging
       - type: bind
         source: ./api/server/controllers/agents/callbacks.js
@@ -26,6 +43,7 @@ services:
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/app/api/data/auth.json
       - NODE_ENV=development
+      - APP_TITLE=loveholid.ai
 
   metrics:
     image: ghcr.io/virtuos/librechat_exporter:main
